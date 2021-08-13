@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:ce="http://www.mulesoft.org/schema/mule/ce/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ce/core http://www.mulesoft.org/schema/mule/ce/core/current/mule-ce.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3e34623b-a62d-4a9f-b629-d255eebc1b19" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="bc1807e4-7079-4baf-8e9f-4a33eac71897" basePath="/ERP102400" >
+		<http:request-connection protocol="HTTPS" host="${epicorserver}" port="443" >
+			<tls:context >
+				<tls:trust-store insecure="true" />
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+	<global-property doc:name="Global Property" doc:id="d7152c5c-5136-4cfe-9b13-af81c99869d8" name="epicorserver" value="localhost" />
+	<flow name="epicorFlow" doc:id="90fe8e81-2b5e-49a2-aa1d-bbe69234c468" >
+		<http:listener doc:name="Listener" doc:id="b349c4fb-7520-403b-b942-444be7d05cfc" config-ref="HTTP_Listener_config" path="/createCust"/>
+		<set-variable value='#[output application/json
+---
+{
+      "Company": "EPIC06",
+      "CustID": "MYTEST",
+      "CustNum": 12,
+      "Name": "My test customer",
+      "TerritoryID":  "US MID"
+}]' doc:name="Set Variable" doc:id="57666e55-2f35-4757-8878-55a695104380" variableName="mockrequest"/>
+		<http:request method="GET" doc:name="Request (Create Customer Request)" doc:id="fa69f6f5-d3a1-4528-b894-ae8b9270cfc5" config-ref="HTTP_Request_configuration" path="/api/v2/odata/EPIC06/Erp.Bo.CustomerSvc/Customers">
+			<http:body ><![CDATA[#[vars.mockrequest]]]></http:body>
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"x-api-key" : "atI7eSN1f1Uuao8gsgtDeWzRv4LiC9OotpUbzFTAPN7mk",
+	"Authorization" : "Basic",
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+	</flow>
+	<flow name="TestFlow" doc:id="0c1ee9ed-5999-47e9-8aaf-1ad7aea988eb" >
+		<http:listener doc:name="Listener" doc:id="dc9efb1e-7a52-44cb-8999-43aa7fbc6a3c" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value='#["Test Success !"]' doc:name="Test Payload" doc:id="eea09d50-a413-4060-8ab0-5cf19021c619" />
+	</flow>
+</mule>
