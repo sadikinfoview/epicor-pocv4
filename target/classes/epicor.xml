@@ -41,6 +41,6 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	</flow>
 	<flow name="TestFlow" doc:id="0c1ee9ed-5999-47e9-8aaf-1ad7aea988eb" >
 		<http:listener doc:name="Listener" doc:id="dc9efb1e-7a52-44cb-8999-43aa7fbc6a3c" config-ref="HTTP_Listener_config" path="/test"/>
-		<set-payload value='#["Test Success !"]' doc:name="Test Payload" doc:id="eea09d50-a413-4060-8ab0-5cf19021c619" />
+		<set-payload value='#["Test Success Infoview!"]' doc:name="Test Payload" doc:id="eea09d50-a413-4060-8ab0-5cf19021c619" />
 	</flow>
 </mule>
