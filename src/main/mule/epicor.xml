@@ -9,8 +9,8 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3e34623b-a62d-4a9f-b629-d255eebc1b19" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
-	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="bc1807e4-7079-4baf-8e9f-4a33eac71897" basePath="/ERP102400" >
-		<http:request-connection protocol="HTTPS" host="${epicorserver}" port="443" >
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="bc1807e4-7079-4baf-8e9f-4a33eac71897" basePath="/EpicorERPTest" >
+		<http:request-connection protocol="HTTPS" host="epapp01test.leapers.com" port="443" >
 			<tls:context >
 				<tls:trust-store insecure="true" />
 			</tls:context>
@@ -28,15 +28,13 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
       "Name": "My test customer",
       "TerritoryID":  "US MID"
 }]' doc:name="Set Variable" doc:id="57666e55-2f35-4757-8878-55a695104380" variableName="mockrequest"/>
-		<http:request method="GET" doc:name="Request (Create Customer Request)" doc:id="fa69f6f5-d3a1-4528-b894-ae8b9270cfc5" config-ref="HTTP_Request_configuration" path="/api/v2/odata/EPIC06/Erp.Bo.CustomerSvc/Customers">
+		<http:request method="GET" doc:name="Request (Create Customer Request)" doc:id="fa69f6f5-d3a1-4528-b894-ae8b9270cfc5" config-ref="HTTP_Request_configuration" path="/api/v2/odata/99815/Erp.Bo.SalesOrderSvc/SalesOrders">
 			<http:body ><![CDATA[#[vars.mockrequest]]]></http:body>
-			<http:headers ><![CDATA[#[output application/java
+			<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"x-api-key" : "atI7eSN1f1Uuao8gsgtDeWzRv4LiC9OotpUbzFTAPN7mk",
-	"Authorization" : "Basic",
-	"Content-Type" : "application/json"
-}]]]></http:headers>
+	"api-key" : "M0pMpjZu5I10Ry4xb1mjrUTbmoiUogsOBUTu0jbjHQby0"
+}]]]></http:query-params>
 		</http:request>
 	</flow>
 	<flow name="TestFlow" doc:id="0c1ee9ed-5999-47e9-8aaf-1ad7aea988eb" >
